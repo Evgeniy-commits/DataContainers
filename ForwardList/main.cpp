@@ -4,7 +4,6 @@ using namespace std;
 
 #define tab  "\t"
 
-
 class Element
 {
 	int Data;
@@ -122,7 +121,6 @@ public:
 		count--;
 	}
 
-
 	//		Methods:
 	void print()const
 	{
@@ -135,6 +133,11 @@ public:
 		cout << "Количество элементов списка: " << count << endl;
 	}
 };
+
+ForwardList operator+(const ForwardList left, const ForwardList right)
+{
+
+}
 
 //#define BASE_CHECK
 
@@ -206,8 +209,17 @@ void main()
 
 
 
-
-
+//
+//String operator+(const String& left, const String& right)
+//{
+//	int length = strlen(left.str) + strlen(right.str);
+//	char* buffer = new char[length + 1];
+//	for (int i = 0; i < strlen(left.str); i++)
+//		buffer[i] = left.str[i];
+//	for (int i = 0; i < length; i++)
+//		buffer[i + strlen(left.str)] = right.str[i];
+//	return buffer;
+//}
 
 ////ForwardList
 //#include <iostream>
