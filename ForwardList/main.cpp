@@ -1,6 +1,7 @@
 ﻿//ForwardList
 #include <iostream>
 #include <time.h>
+#include <forward_list>
 using namespace std;
 
 #define tab  "\t"
@@ -59,11 +60,26 @@ public:
 		//если список пуст, то его Голова обязательно указывает на 0;
 		cout << "FLConstructor:\t" << this << endl;
 	}
+	ForwardList(int size)
+	{
+		for (int i = 0; i < size; i++) push_front(0);
+		cout << "FLFillConstructor:\t" << this << endl;
+	}
+
 	ForwardList(const ForwardList& other) : ForwardList()
 	{
 		//Deep copy (побитовое копирование)
 		*this = other;
 		cout << "FLCopyConstructor:\t" << this << endl;
+	}
+	ForwardList(ForwardList&& other) : ForwardList()
+	{
+		//Shallow copy (поверхностное копирование)
+		this->Head = other.Head;
+		this->size = other.size;
+		other.Head = nullptr;
+		other.size = 0;
+		cout << "FLMoveConstructor:\t" << this << endl;
 	}
 	~ForwardList()
 	{
@@ -85,6 +101,47 @@ public:
 		return *this;
 	}
 
+	ForwardList& operator=(ForwardList&& other) noexcept
+	{
+		if (this == &other)return *this;
+		this->~ForwardList();
+		this->Head = other.Head;
+		this->size = other.size;
+		other.Head = nullptr;
+		other.size = 0;
+		cout << "MoveAssignment:\t\t" << this << endl;
+		return *this;
+	}
+
+
+	//Element* operator[](const int index)
+	//{
+	//	Element* Temp = Head;
+	//	for (int i = 0; i < index; i++) Temp = Temp->pNext;
+	//	return Temp;
+	//}
+
+	//int operator[](const int index)
+	//{
+	//	Element* Temp = Head;
+	//	for (int i = 0; i < index; i++) Temp = Temp->pNext;
+	//	return Temp->Data;
+	//}
+
+	const int& operator[] (int index) const
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;
+		return Temp->Data;
+	}
+	int& operator[] (int index)
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;
+		return Temp->Data;
+	}
+
+		
 	//		Adding elements
 	void push_front(int Data)
 	{
@@ -101,7 +158,6 @@ public:
 	}
 	void push_back(int Data)
 	{
-
 		if (Head == nullptr) return push_front(Data);
 		//Element* New = new Element(Data);
 		Element* Temp = Head;
@@ -181,9 +237,11 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 	return fusion;
 }
 
+
 //#define BASE_CHECK
-#define OPERATOR_PLUS_CHECK
+//#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
+//#define SUBSCRIPT_OPERATOR
 
 
 void main()
@@ -262,4 +320,31 @@ void main()
 	system("PAUSE");
 #endif // PERFORMANCE_CHECK
 
+#ifdef SUBSCRIPT_OPERATOR
+	ForwardList list(50000);
+	//list.print();
+
+	clock_t t_start = clock();
+	for (int i = 0; i < list.get_size(); i++)
+	{
+		/*list.push_front(rand() % 100);
+		list.pop_back();*/
+		list[i] = rand() % 100;
+	}
+	clock_t t_end = clock();
+	cout << "ForwardList filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
+	system("PAUSE");
+	for (int i = 0; i < list.get_size(); i++) cout << list[i] << tab;
+	cout << endl;
+
+	ForwardList fusion;
+	cout << delimiter << endl;
+	fusion = list1 + list2;   //CopyAssignment
+	cout << delimiter << endl;
+	fusion.print();
+#endif // SUBSCRIPT_OPERATOR
 }
+
+
+
+
