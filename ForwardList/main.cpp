@@ -69,15 +69,15 @@ public:
 		*this = other;
 		cout << "FLCopyConstructor:\t" << this << endl;
 	}
-	ForwardList(ForwardList&& other) : ForwardList()
-	{
-		//Shallow copy (побитовое копирование)
-		this->Head = other.Head;
-		this->size = other.size;
-		Head = nullptr;
-		size = 0;
-		cout << "FLMoveConstructor:\t" << this << endl;
-	}
+	//ForwardList(ForwardList&& other) : ForwardList()
+	//{
+	//	//Shallow copy (побитовое копирование)
+	//	this->Head = other.Head;
+	//	this->size = other.size;
+	//	Head = nullptr;
+	//	size = 0;
+	//	cout << "FLMoveConstructor:\t" << this << endl;
+	//}
 	~ForwardList()
 	{
 		clock_t t_start = clock();
@@ -97,7 +97,7 @@ public:
 		cout << "FLCopyAssignment:\t" << this << endl;
 		return *this;
 	}
-	ForwardList& operator=(ForwardList&& other)
+	/*ForwardList& operator=(ForwardList&& other)
 	{
 		if (this == &other) return *this; 
 		while (Head) pop_front();         
@@ -107,7 +107,7 @@ public:
 		size = 0;
 		cout << "FLMoveAssignment:\t" << this << endl;
 		return *this;
-	}
+	}*/
 
 	const int& operator[] (int index) const
 	{
@@ -314,4 +314,18 @@ void main()
 	//cout << endl;  
 #endif // SUBSCRIPT_OPERATOR_CHECK
 
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
+	clock_t t_start, t_end;
+	ForwardList list1;
+	t_start = clock();
+	for (int i = 0; i < n; i++)
+		list1.push_front(rand() % 100);
+	t_end = clock();
+	cout << "ForwardList filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
+	system("Pause");
+	t_start = clock();
+	ForwardList list2 = list1;
+	t_end = clock();
+	cout << "Copying complete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 }
