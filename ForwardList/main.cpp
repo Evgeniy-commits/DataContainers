@@ -1,5 +1,4 @@
-﻿//ForwardList
-#include <iostream>
+﻿#include <iostream>
 #include <time.h>
 using namespace std;
 
@@ -59,11 +58,25 @@ public:
 		//если список пуст, то его Голова обязательно указывает на 0;
 		cout << "FLConstructor:\t" << this << endl;
 	}
+	ForwardList(int size) :ForwardList()
+	{
+		while (size--) push_front(0);
+		cout << "FLSizeConstructor:\t" << this << endl;
+	}
 	ForwardList(const ForwardList& other) : ForwardList()
 	{
 		//Deep copy (побитовое копирование)
 		*this = other;
 		cout << "FLCopyConstructor:\t" << this << endl;
+	}
+	ForwardList(ForwardList&& other) : ForwardList()
+	{
+		//Shallow copy (побитовое копирование)
+		this->Head = other.Head;
+		this->size = other.size;
+		Head = nullptr;
+		size = 0;
+		cout << "FLMoveConstructor:\t" << this << endl;
 	}
 	~ForwardList()
 	{
@@ -83,6 +96,31 @@ public:
 			push_back(Temp->Data);
 		cout << "FLCopyAssignment:\t" << this << endl;
 		return *this;
+	}
+	ForwardList& operator=(ForwardList&& other)
+	{
+		if (this == &other) return *this; 
+		while (Head) pop_front();         
+		this->Head = other.Head;
+		this->size = other.size;
+		Head = nullptr;
+		size = 0;
+		cout << "FLMoveAssignment:\t" << this << endl;
+		return *this;
+	}
+
+	const int& operator[] (int index) const
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;
+		return Temp->Data;
+	}
+
+	int& operator[] (int index)
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;
+		return Temp->Data;
 	}
 
 	//		Adding elements
@@ -182,9 +220,9 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 }
 
 //#define BASE_CHECK
-#define OPERATOR_PLUS_CHECK
+//#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
-
+//#define SUBSCRIPT_OPERATOR_CHECK
 
 void main()
 {
@@ -261,5 +299,19 @@ void main()
 	cout << "ForwardList filled. " << double(t_end - t_start)/CLOCKS_PER_SEC << " sec. ";
 	system("PAUSE");
 #endif // PERFORMANCE_CHECK
+
+#ifdef SUBSCRIPT_OPERATOR_CHECK
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
+	ForwardList list(n);
+	clock_t t_start = clock();
+	for (int i = 0; i < list.get_size(); i++)
+		list[i] = rand() % 100;
+	clock_t t_end = clock();
+	cout << "ForwardList filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
+	system("Pause");
+	//for (int i = 0; i < list.get_size(); i++) cout << list[i] << tab;
+	//cout << endl;  
+#endif // SUBSCRIPT_OPERATOR_CHECK
 
 }
