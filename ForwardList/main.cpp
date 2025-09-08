@@ -349,7 +349,7 @@ void main()
 
 	ForwardList fusion;
 	ForwardList list1(10000);
-	ForwardList list2(25000);
+	ForwardList list2(10000);
 	for (int i = 0; i < list1.get_size(); i++)
 	{
 		list1[i] = rand() % 100;
