@@ -69,17 +69,21 @@ public:
 	ForwardList(const ForwardList& other) : ForwardList()
 	{
 		//Deep copy (побитовое копирование)
+		clock_t t_start = clock();
 		*this = other;
-		cout << "FLCopyConstructor:\t" << this << endl;
+		clock_t t_end = clock();
+		cout << "FLCopyConstructor:\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 	}
-	ForwardList(ForwardList&& other) : ForwardList()
+	ForwardList(ForwardList&& other) noexcept: ForwardList()
 	{
 		//Shallow copy (поверхностное копирование)
+		clock_t t_start = clock();
 		this->Head = other.Head;
 		this->size = other.size;
 		other.Head = nullptr;
 		other.size = 0;
-		cout << "FLMoveConstructor:\t" << this << endl;
+		clock_t t_end = clock();
+		cout << "FLMoveConstructor:\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 	}
 	~ForwardList()
 	{
@@ -92,24 +96,28 @@ public:
 	//      Operators
 	ForwardList& operator=(const ForwardList& other)
 	{
+		clock_t t_start = clock();
 		if (this == &other) return *this; //0) Проверить, что This и Other разные объекты
 		while (Head) pop_front();         //1) Очистить данные
 		//2)Deep copy (побитовое копирование)
 		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
 			push_back(Temp->Data);
-		cout << "FLCopyAssignment:\t" << this << endl;
+		clock_t t_end = clock();
+		cout << "FLCopyAssignment:\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 		return *this;
 	}
 
 	ForwardList& operator=(ForwardList&& other) noexcept
 	{
+		clock_t t_start = clock();
 		if (this == &other)return *this;
 		this->~ForwardList();
 		this->Head = other.Head;
 		this->size = other.size;
 		other.Head = nullptr;
 		other.size = 0;
-		cout << "MoveAssignment:\t\t" << this << endl;
+		clock_t t_end = clock();
+		cout << "MoveAssignment:\t\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 		return *this;
 	}
 
@@ -241,7 +249,7 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 //#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
-//#define SUBSCRIPT_OPERATOR
+#define SUBSCRIPT_OPERATOR
 
 
 void main()
@@ -321,27 +329,43 @@ void main()
 #endif // PERFORMANCE_CHECK
 
 #ifdef SUBSCRIPT_OPERATOR
-	ForwardList list(50000);
-	//list.print();
+	//ForwardList list(50000);
+	////list.print();
 
-	clock_t t_start = clock();
-	for (int i = 0; i < list.get_size(); i++)
-	{
-		/*list.push_front(rand() % 100);
-		list.pop_back();*/
-		list[i] = rand() % 100;
-	}
-	clock_t t_end = clock();
-	cout << "ForwardList filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
-	system("PAUSE");
-	for (int i = 0; i < list.get_size(); i++) cout << list[i] << tab;
-	cout << endl;
+	//clock_t t_start = clock();
+	//for (int i = 0; i < list.get_size(); i++)
+	//{
+	//	/*list.push_front(rand() % 100);
+	//	list.pop_back();*/
+	//	list[i] = rand() % 100;
+	//}
+	//clock_t t_end = clock();
+	//cout << "ForwardList filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
+	//system("PAUSE");
+	//for (int i = 0; i < list.get_size(); i++) cout << list[i] << tab;
+	//cout << endl;
+
 
 	ForwardList fusion;
+	ForwardList list1(1000);
+	ForwardList list2(2500);
+	for (int i = 0; i < list1.get_size(); i++)
+	{
+		list1[i] = rand() % 100;
+	}
+	for (int i = 0; i < list2.get_size(); i++)
+	{
+		list2[i] = rand() % 100;
+	}
 	cout << delimiter << endl;
+	clock_t t_start = clock();
 	fusion = list1 + list2;   //CopyAssignment
+	clock_t t_end = clock();
+	cout << "ForwardList filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 	cout << delimiter << endl;
-	fusion.print();
+	///list1.print();
+	//list2.print();
+	//fusion.print();
 #endif // SUBSCRIPT_OPERATOR
 }
 
