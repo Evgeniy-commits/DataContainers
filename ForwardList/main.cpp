@@ -62,6 +62,7 @@ public:
 	}
 	ForwardList(int size)
 	{
+		Head = nullptr;
 		for (int i = 0; i < size; i++) push_front(0);
 		cout << "FLFillConstructor:\t" << this << endl;
 	}
@@ -347,8 +348,8 @@ void main()
 
 
 	ForwardList fusion;
-	ForwardList list1(1000);
-	ForwardList list2(2500);
+	ForwardList list1(10000);
+	ForwardList list2(25000);
 	for (int i = 0; i < list1.get_size(); i++)
 	{
 		list1[i] = rand() % 100;
