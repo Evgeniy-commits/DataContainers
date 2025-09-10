@@ -5,6 +5,7 @@ using namespace std;
 #define tab  "\t"
 #define delimiter "\n-------------------------------------------------------------\n"
 
+class ForwardList;
 class Element
 {
 	int Data;
@@ -31,10 +32,52 @@ public:
 
 	}
 	friend class ForwardList;
+	friend class Iterator;
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 
 int Element::count = 0;
+
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr) : Temp(Temp)
+	{
+		cout << "ITConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "ITDestructor:\t" << this << endl;
+	}
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+//	Iterator operator++(int)
+//	{
+//		Iterator old = *this;
+//		Temp = Temp->pNext;
+//		return old;
+//	}
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+	int operator*() const
+	{
+		return Temp->Data;
+	}
+	int& operator*()
+	{
+		return Temp->Data;
+	}
+};
 
 class ForwardList
 {
@@ -49,7 +92,14 @@ public:
 	{
 		return size;
 	}
-
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
 	ForwardList()
 	{
 		Head = nullptr;
@@ -58,10 +108,19 @@ public:
 		//если список пуст, то его Голова обязательно указывает на 0;
 		cout << "FLConstructor:\t" << this << endl;
 	}
-	ForwardList(int size) :ForwardList()
+	explicit ForwardList(int size) :ForwardList()
 	{
 		while (size--) push_front(0);
 		cout << "FLSizeConstructor:\t" << this << endl;
+	}
+	ForwardList(const std::initializer_list<int>& il) :ForwardList()
+	{
+		cout << typeid(il.begin()).name() << endl;
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
+		cout << "FLItConstructor:\t" << this << endl;
 	}
 	ForwardList(const ForwardList& other) : ForwardList()
 	{
@@ -223,6 +282,7 @@ public:
 		//память, что и наш объект, поэтому деструктор очистит полностью, чтобы этого не произошло
 		//зануляем список.
 	}
+	
 };
 
 ForwardList operator+(const ForwardList& left, const ForwardList& right)
@@ -236,12 +296,24 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 	return fusion;
 }
 
+void print(int arr[])
+{
+	cout << typeid(arr).name() << endl;
+	cout << sizeof(arr) / sizeof(arr[0]) << endl;
+	/*for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	cout << endl;*/
+}
+
 //#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
-#define MOVE_SEMANTIC_CHECK
+//#define MOVE_SEMANTIC_CHECK
+//#define RANGE_BASED_FOR_ARRAY
 
 void main()
 {
@@ -363,8 +435,8 @@ void main()
 	clock_t t_start, t_end;
 
 	t_start = clock();
-	for (int i = 0; i < 3000000; i++) list1.push_front(rand());
-	for (int i = 0; i < 3000000; i++) list2.push_front(rand());
+	for (int i = 0; i < 30000000; i++) list1.push_front(rand());
+	for (int i = 0; i < 30000000; i++) list2.push_front(rand());
 	t_end = clock();
 	cout << "ForwardList12 filled " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 	system("Pause");
@@ -379,5 +451,27 @@ void main()
 	cout << "ForwardList4 filled " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 #endif // MOVE_SEMANTIC_CHECK
 
+#ifdef RANGE_BASED_FOR_ARRAY
+	int arr[] = { 3, 5, 8, 13, 21 };
+	for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		cout << arr[i] << tab;
+	}
+	cout << endl;
 
+	//Range-based for - for для диапазонаю Под диапазоном понимается контейнер
+	//(какой-то набор элементов)
+
+	for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+	cout << typeid(arr).name() << endl;
+	print(arr);
+#endif // RANGE_BASED_FOR_ARRAY
+
+	ForwardList list = { 3, 5, 8, 13, 21 };
+	for (int i : list) cout << i << tab; cout << endl;
+	
 }
