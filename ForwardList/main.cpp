@@ -191,10 +191,10 @@ public:
 	}
 	~List()
 	{
+		Head = nullptr;
+		Tail = nullptr;
 		clock_t t_start = clock();
 		while (Head) pop_front();
-		/*Head = nullptr;
-		Tail = nullptr;*/
 		clock_t t_end = clock();
 		cout << "FLDestructor:\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 	}
@@ -225,7 +225,7 @@ public:
 		return *this;
 	}
 
-	const int& operator[] (int index) const
+	/*const int& operator[] (int index) const
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++) Temp = Temp->pNext;
@@ -237,7 +237,7 @@ public:
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++) Temp = Temp->pNext;
 		return Temp->Data;
-	}
+	}*/
 
 	//		Adding elements
 	void push_front(int Data)
@@ -373,14 +373,14 @@ List operator+(const List& left, const List& right)
 //	cout << endl;*/
 //}
 
-#define BASE_CHECK
+//#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-//#define RANGE_BASED_FOR_LIST
+#define RANGE_BASED_FOR_LIST
 
 void main()
 {
@@ -545,6 +545,12 @@ void main()
 	for (int i : list) cout << i << tab; cout << endl;
 	cout << delimiter << endl;
 	for (Iterator it = list.begin(); it != list.end(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+
+	for (ReverseIterator it = list.rbegin(); it != list.rend(); ++it)
 	{
 		cout << *it << tab;
 	}
