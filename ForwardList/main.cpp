@@ -246,7 +246,7 @@ public:
 			size++;
 			return;
 		}
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 		/*New->pNext = Head;
 		Head->pPrev = New;
 		Head = New;*/
@@ -257,7 +257,7 @@ public:
 	{
 
 		if (Head == nullptr && Tail == nullptr) return push_front(Data);
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 		/*New->pPrev = Tail;
 		Tail->pNext = New;
 		Tail = New;*/
@@ -363,7 +363,7 @@ List operator+(const List& left, const List& right)
 //	cout << endl;*/
 //}
 
-//#define BASE_CHECK
+#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
@@ -390,7 +390,7 @@ void main()
 	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 	system("PAUSE");
 	//list.push_back(123);
-	//list.print();
+	list.print();
 	//list.pop_front();
 	//list.print();
 	//list.pop_back();
