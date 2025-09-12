@@ -181,22 +181,20 @@ public:
 	{
 		//Deep copy (побитовое копирование)
 		*this = other;
-		cout << "FLCopyConstructor:\t" << this << endl;
+		cout << "LCopyConstructor:\t" << this << endl;
 	}
 	List(List&& other) noexcept : List()
 	{
 		//Shallow copy (поверхностное копирование)
 		*this = std::move(other);
-		cout << "FLMoveConstructor:\t" << this << endl;
+		cout << "LMoveConstructor:\t" << this << endl;
 	}
 	~List()
 	{
-		Head = nullptr;
-		Tail = nullptr;
 		clock_t t_start = clock();
 		while (Head) pop_front();
 		clock_t t_end = clock();
-		cout << "FLDestructor:\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
+		cout << "LDestructor:\t" << this << "\tcomplete for " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 	}
 
 	//      Operators
@@ -225,7 +223,7 @@ public:
 		return *this;
 	}
 
-	/*const int& operator[] (int index) const
+	const int& operator[] (int index) const
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++) Temp = Temp->pNext;
@@ -237,7 +235,7 @@ public:
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++) Temp = Temp->pNext;
 		return Temp->Data;
-	}*/
+	}
 
 	//		Adding elements
 	void push_front(int Data)
@@ -292,42 +290,34 @@ public:
 	void pop_front()
 	{
 		if (Head == nullptr) return;
-		if (Head == Tail) {Tail = nullptr; }
+		if (Head == Tail) 
+		{
+			delete Head;
+			Head = Tail = nullptr;
+			size--;
+			return;
+		}
 		Head = Head->pNext;
-		//delete Head->pPrev;
+		delete Head->pPrev;
 		Head->pPrev = nullptr;
 		size--;
 	}
 
 	void pop_back()
 	{
-		if (Tail == nullptr) return;
 		if (Head == Tail) return pop_front();
-		Tail = Tail->pPrev;
-		//delete Tail->pNext;
-		Tail->pNext = nullptr;
-		size--;
-		/*if (Head == Tail)return pop_front();
 		Tail = Tail->pPrev;
 		delete Tail->pNext;
 		Tail->pNext = nullptr;
-		size--;*/
+		size--;
 	}
-
 
 	//		Methods:
 	void print()const
 	{
-		/*Element* Temp = Head;
-		while (Temp)
-		{
-			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-			Temp = Temp->pNext;
-		}*/
-
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов списка: " << size << endl;
+			cout << "Количество элементов списка: " << size << endl;
 	}
 	friend List operator+(const List& left, const List& right);
 
@@ -380,7 +370,7 @@ List operator+(const List& left, const List& right)
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_LIST
+//#define RANGE_BASED_FOR_LIST
 
 void main()
 {
@@ -390,17 +380,21 @@ void main()
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	List list;
+	clock_t t_start = clock();
 	for (int i = 0; i < n; i++)
 	{
 		list.push_back(rand() % 100);
 		//list.push_front(rand() % 100);
 	}
+	clock_t t_end = clock();
+	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
+	system("PAUSE");
 	//list.push_back(123);
-	list.print();
-	list.pop_front();
-	list.print();
-	list.pop_back();
-	list.print();
+	//list.print();
+	//list.pop_front();
+	//list.print();
+	//list.pop_back();
+	//list.print();
 	/*int Index;
 	int value;
 	cout << "Введите индекс добавляемого элемента: "; cin >> Index;
@@ -457,7 +451,6 @@ void main()
 		//list.push_front(rand() % 100);
 	}
 	clock_t t_end = clock();
-
 	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 	system("PAUSE");
 #endif // PERFORMANCE_CHECK
@@ -504,8 +497,8 @@ void main()
 	clock_t t_start, t_end;
 
 	t_start = clock();
-	for (int i = 0; i < 10; i++) list1.push_front(rand());
-	for (int i = 0; i < 10; i++) list2.push_front(rand());
+	for (int i = 0; i < 15000000; i++) list1.push_front(rand());
+	for (int i = 0; i < 15000000; i++) list2.push_front(rand());
 	t_end = clock();
 	cout << "List12 filled " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 	system("Pause");
