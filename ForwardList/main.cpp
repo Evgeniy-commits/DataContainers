@@ -5,22 +5,22 @@ using namespace std;
 #define tab  "\t"
 #define delimiter "\n-------------------------------------------------------------\n"
 
-class List
+template<typename T> class List
 {
 	class Element
-	{	int Data;
+	{	T Data;
 		Element* pNext;
 		Element* pPrev;
 	public:
 				
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev) {}
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev) {}
 
 		~Element() {}
 
-		friend class List;
+		friend class List<T>;
 		friend class Iterator;
 		friend class ReverseIterator;
-		friend List operator+(const List& left, const List& right);
+		friend List<T> operator+(const List<T>& left, const List<T>& right);
 	} *Head, * Tail;
 	
 	size_t size;
@@ -77,6 +77,8 @@ public:
 		{
 			return Temp->Data;
 		}
+		friend List;
+		friend Element;
 	};
 
 	class ReverseIterator
@@ -133,6 +135,9 @@ public:
 		{
 			return Temp->Data;
 		}
+		friend List;
+		friend Element;
+		
 	};
 public:
 	Element* get_Head() const
@@ -173,7 +178,7 @@ public:
 		while (size--) push_front(0);
 		cout << "LSizeConstructor:\t" << this << endl;
 	}
-	List(const std::initializer_list<int>& il) :List()
+	List(const std::initializer_list<T>& il) :List()
 	{
 		//cout << typeid(il.begin()).name() << endl;
 		for (int const* it = il.begin(); it != il.end(); it++)
@@ -182,13 +187,13 @@ public:
 		}
 		cout << "LItConstructor:\t" << this << endl;
 	}
-	List(const List& other) : List()
+	List(const List<T>& other) : List()
 	{
 		//Deep copy (побитовое копирование)
 		*this = other;
 		cout << "LCopyConstructor:\t" << this << endl;
 	}
-	List(List&& other) noexcept : List()
+	List(List<T>&& other) noexcept : List()
 	{
 		//Shallow copy (поверхностное копирование)
 		*this = std::move(other);
@@ -203,7 +208,7 @@ public:
 	}
 
 	//      Operators
-	List& operator=(const List& other)
+	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other) return *this; //0) Проверить, что This и Other разные объекты
 		while (Head) pop_front();         //1) Очистить данные
@@ -214,7 +219,7 @@ public:
 		cout << "FLCopyAssignment:\t" << this << endl;
 		return *this;
 	}
-	List& operator=(List&& other) noexcept
+	List<T>& operator=(List<T>&& other) noexcept
 	{
 		if (this == &other) return *this;
 		while (Head) pop_front();
@@ -243,7 +248,7 @@ public:
 	}
 
 	//		Adding elements
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		if (Head == nullptr)
 		{
@@ -254,7 +259,7 @@ public:
 		Head = Head->pPrev = new Element(Data, Head, nullptr);
 		size++;
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 
 		if (Head == nullptr && Tail == nullptr) return push_front(Data);
@@ -262,7 +267,7 @@ public:
 		size++;
 
 	}
-	void insert(int Data, int Index)
+	void insert(T Data, int Index)
 	{
 		if (Index < 0) return;
 		if (Index == 0 || size == 0) return push_front(Data);
@@ -342,6 +347,7 @@ public:
 	}
 
 	//		Methods:
+
 	void print()const
 	{
 		cout << delimiter << endl;
@@ -386,12 +392,12 @@ public:
 		//зануляем список.
 	}
 	friend class Element;
-	friend List operator+(const List& left, const List& right);
+	friend List<T> operator+(const List<T>& left, const List<T>& right);
 };
 
-List operator+(const List& left, const List& right)
+template <typename T> List<T> operator+(const List<T>& left, const List<T>& right)
 {
-	List fusion;
+	List<T> fusion;
 	for (List::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
 	for (List::Element* Temp = right.get_Head(); Temp; Temp = Temp->pNext)
@@ -407,7 +413,8 @@ List operator+(const List& left, const List& right)
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_LIST
+//#define RANGE_BASED_FOR_LIST
+#define CHECK_CODE
 
 void main()
 {
@@ -416,12 +423,12 @@ void main()
 #ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
-	List list;
+	List<double> list;
 	clock_t t_start = clock();
 	for (int i = 0; i < n; i++)
 	{
 		//list.push_front(rand() % 100);
-		list.push_back(rand() % 100);
+		list.push_back((double)(rand() % 100)/10);
 	}
 	clock_t t_end = clock();
 	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
@@ -585,5 +592,15 @@ void main()
 	}
 	cout << endl;
 #endif // RANGE_BASED_FOR_LIST
+
+#ifdef CHECK_CODE
+	List<int> list1 = { 3, 5, 8, 13, 21 };
+	List<int> list2 = { 34, 55, 89 };
+	//List<int> list3 = list1 + list2;
+	for (int i : list1)cout << i << tab; cout << endl;
+	for (int i : list2)cout << i << tab; cout << endl;
+	//for (int i : list3)cout << i << tab; cout << endl;
+#endif // CHECK_CODE
+
 }
 
