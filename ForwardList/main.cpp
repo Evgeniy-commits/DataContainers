@@ -389,8 +389,6 @@ public:
 	friend List operator+(const List& left, const List& right);
 };
 
-
-
 List operator+(const List& left, const List& right)
 {
 	List fusion;
