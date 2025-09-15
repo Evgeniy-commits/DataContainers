@@ -18,8 +18,8 @@ template<typename T> class List
 		~Element() {}
 
 		friend class List<T>;
-		friend class Iterator;
-		friend class ReverseIterator;
+		friend class List<T>::Iterator;
+		friend class List<T>::ReverseIterator;
 		friend List<T> operator+(const List<T>& left, const List<T>& right);
 	} *Head, * Tail;
 	
@@ -69,16 +69,15 @@ public:
 		{
 			return this->Temp != other.Temp;
 		}
-		int operator*() const
+		T operator*() const
 		{
 			return Temp->Data;
 		}
-		int& operator*()
+		T& operator*()
 		{
 			return Temp->Data;
 		}
-		friend List;
-		friend Element;
+		friend class List<T>;
 	};
 
 	class ReverseIterator
@@ -127,17 +126,15 @@ public:
 			return this->Temp != other.Temp;
 		}
 
-		const int& operator*()const
+		T operator*()const
 		{
 			return Temp->Data;
 		}
-		int& operator*()
+		T& operator*()
 		{
 			return Temp->Data;
 		}
-		friend List;
-		friend Element;
-		
+		friend class List<T>;
 	};
 public:
 	Element* get_Head() const
@@ -233,14 +230,14 @@ public:
 		return *this;
 	}
 
-	const int& operator[] (int index) const
+	T operator[] (int index) const
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++) Temp = Temp->pNext;
 		return Temp->Data;
 	}
 
-	int& operator[] (int index)
+	T& operator[] (int index)
 	{
 		Element* Temp = Head;
 		for (int i = 0; i < index; i++) Temp = Temp->pNext;
@@ -391,16 +388,18 @@ public:
 		//память, что и наш объект, поэтому деструктор очистит полностью, чтобы этого не произошло
 		//зануляем список.
 	}
-	friend class Element;
+	/*friend class Element;
+	friend class Iterator;
+	friend class ReverseIterator;*/
 	friend List<T> operator+(const List<T>& left, const List<T>& right);
 };
 
-template <typename T> List<T> operator+(const List<T>& left, const List<T>& right)
+template<typename T> List<T> operator+(const List<T>& left, const List<T>& right)
 {
-	List<T> fusion;
+	List fusion;
 	for (List::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
-	for (List::Element* Temp = right.get_Head(); Temp; Temp = Temp->pNext)
+	for (List::Element* Temp = right.Head; Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
 	fusion.revers();
 	return fusion;
@@ -596,10 +595,10 @@ void main()
 #ifdef CHECK_CODE
 	List<int> list1 = { 3, 5, 8, 13, 21 };
 	List<int> list2 = { 34, 55, 89 };
-	//List<int> list3 = list1 + list2;
+	List<int> list3 = list1 + list2;
 	for (int i : list1)cout << i << tab; cout << endl;
 	for (int i : list2)cout << i << tab; cout << endl;
-	//for (int i : list3)cout << i << tab; cout << endl;
+	for (int i : list3)cout << i << tab; cout << endl;
 #endif // CHECK_CODE
 
 }
