@@ -71,7 +71,7 @@ public:
 	
 	List(Element* Head = nullptr, Element* Tail = nullptr, int size = 0);
 	explicit List(int size):List();
-	List(const std::initializer_list<T>& il, Element* Head = nullptr, Element* Tail = nullptr, int size = 0) :List();
+	List(const std::initializer_list<T>& il) :List();
 	List(const List<T>& other) : List();
 	List(List<T>&& other) noexcept : List();
 	~List();
@@ -462,7 +462,7 @@ template<typename T> List<T>::List(int size) : List()
 	while (size--) push_front(0);
 	cout << "LSizeConstructor:\t" << this << endl;
 }
-template<typename T> List<T>::List(const std::initializer_list<T>& il, Element* Head, Element* Tail, int size ) :List()
+template<typename T> List<T>::List(const std::initializer_list<T>& il) :List()
 {
 	//cout << typeid(il.begin()).name() << endl;
 	for (int const* it = il.begin(); it != il.end(); it++)
