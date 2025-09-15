@@ -4,6 +4,7 @@ using namespace std;
 
 #define tab  "\t"
 #define delimiter "\n-------------------------------------------------------------\n"
+//template<typename T>  List<T> operator+(const List<T>& left, const List<T>& right);
 
 template<typename T> class List
 {
@@ -17,10 +18,10 @@ template<typename T> class List
 
 		~Element() {}
 
-		friend class List<T>;
-		friend class List<T>::Iterator;
-		friend class List<T>::ReverseIterator;
-		friend List<T> operator+(const List<T>& left, const List<T>& right);
+		friend class List;
+		friend class Iterator;
+		friend class ReverseIterator;
+		//friend List<T> operator+(const List<T>& left, const List<T>& right);
 	} *Head, * Tail;
 	
 	size_t size;
@@ -77,7 +78,7 @@ public:
 		{
 			return Temp->Data;
 		}
-		friend class List<T>;
+		friend class List;
 	};
 
 	class ReverseIterator
@@ -134,7 +135,7 @@ public:
 		{
 			return Temp->Data;
 		}
-		friend class List<T>;
+		friend class List;
 	};
 public:
 	Element* get_Head() const
@@ -388,24 +389,22 @@ public:
 		//память, что и наш объект, поэтому деструктор очистит полностью, чтобы этого не произошло
 		//зануляем список.
 	}
-	/*friend class Element;
-	friend class Iterator;
-	friend class ReverseIterator;*/
-	friend List<T> operator+(const List<T>& left, const List<T>& right);
+	
+	//friend List<T> operator+(const List<T>& left, const List<T>& right);
 };
 
-template<typename T> List<T> operator+(const List<T>& left, const List<T>& right)
-{
-	List fusion;
-	for (List::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
-		fusion.push_front(Temp->Data);
-	for (List::Element* Temp = right.Head; Temp; Temp = Temp->pNext)
-		fusion.push_front(Temp->Data);
-	fusion.revers();
-	return fusion;
-}
+//template<typename T> List<T> operator+(const List<T>& left, const List<T>& right)
+//{
+//	List<T> fusion;
+//	for (List<T>:: Element* List<T>::Temp = left.get_Head(); List<T>::Temp; List<T>::Temp = List<T>::Temp->pNext)
+//		fusion.push_front(List<T>::Temp->Data);
+//	for (List<T>:: Element* List<T>::Temp = right.Head; List<T>::Temp; List<T>::Temp = List<T>::Temp->pNext)
+//		fusion.push_front(List<T>::Temp->Data);
+//	fusion.revers();
+//	return fusion;
+//}
 
-//#define BASE_CHECK
+#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
@@ -413,7 +412,7 @@ template<typename T> List<T> operator+(const List<T>& left, const List<T>& right
 //#define MOVE_SEMANTIC_CHECK
 //#define RANGE_BASED_FOR_ARRAY
 //#define RANGE_BASED_FOR_LIST
-#define CHECK_CODE
+//#define CHECK_CODE
 
 void main()
 {
