@@ -407,7 +407,8 @@ List operator+(const List& left, const List& right)
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_LIST
+//#define RANGE_BASED_FOR_LIST
+#define CHECK_CODE
 
 void main()
 {
@@ -585,5 +586,15 @@ void main()
 	}
 	cout << endl;
 #endif // RANGE_BASED_FOR_LIST
+
+#ifdef CHECK_CODE
+	List list1 = { 3, 5, 8, 13, 21 };
+	List list2 = { 34, 55, 89 };
+	List list3 = list1 + list2;
+	for (int i : list1)cout << i << tab; cout << endl;
+	for (int i : list2)cout << i << tab; cout << endl;
+	for (int i : list3)cout << i << tab; cout << endl;
+#endif // CHECK_CODE
+
 }
 
