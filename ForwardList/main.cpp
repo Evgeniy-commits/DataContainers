@@ -40,6 +40,7 @@ public:
 		T operator*() const;
 		T& operator*();
 		friend class List;
+		friend List<T> operator+(const List<T>& left, const List<T>& right);
 	};
 
 	class ReverseIterator
@@ -58,6 +59,7 @@ public:
 		T operator*()const;		
 		T& operator*();
 		friend class List;
+		friend List<T> operator+(const List<T>& left, const List<T>& right);
 	};
 public:
 	Element* get_Head() const;	
@@ -69,10 +71,10 @@ public:
 	ReverseIterator rend() const;
 	
 	List(Element* Head = nullptr, Element* Tail = nullptr, int size = 0);
-	explicit List(int size):List();
-	List(const std::initializer_list<T>& il) :List();
-	List(const List<T>& other) : List();
-	List(List<T>&& other) noexcept : List();
+	explicit List(int size);
+	List(const std::initializer_list<T>& il);
+	List(const List<T>& other);
+	List(List<T>&& other) noexcept;
 	~List();
 	
 
@@ -106,10 +108,10 @@ public:
 
 template <typename T> List<T> operator+(const List<T>& left, const List<T>& right)
 {
-	List<T> fusion;
-	for (List<T>::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
+	List fusion;
+	for (List::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
-	for (List<T>::Element* Temp = right.get_Head(); Temp; Temp = Temp->pNext)
+	for (List::Element* Temp = right.get_Head(); Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
 	fusion.revers();
 	return fusion;
@@ -327,23 +329,23 @@ template<typename T> List<T>::Iterator::~Iterator()
 {
 	cout << "ITDestructor:\t" << this << endl;
 }
-template<typename T> List<T>::Iterator& List<T>::Iterator::operator++()
+template<typename T> List<T>::Iterator& List<T>::Iterator:: operator++()
 {
 	Temp = Temp->pNext;
 	return *this;
 }
-template<typename T> List<T>::Iterator List<T>::Iterator::operator++(int)
+template<typename T> List<T>::Iterator List<T>::Iterator:: operator++(int)
 {
 	Iterator old = *this;
 	Temp = Temp->pNext;
 	return old;
 }
-template<typename T> List<T>::Iterator& List<T>::Iterator::operator--()
+template<typename T> List<T>::Iterator& List<T>::Iterator:: operator--()
 {
 	Temp = Temp->pPrev;
 	return *this;
 }
-template<typename T> List<T>::Iterator List<T>::Iterator::operator--(int)
+template<typename T> List<T>::Iterator List<T>::Iterator:: operator--(int)
 {
 	Iterator old = *this;
 	Temp = Temp->pPrev;
