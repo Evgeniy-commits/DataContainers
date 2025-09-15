@@ -407,8 +407,8 @@ List operator+(const List& left, const List& right)
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-//#define RANGE_BASED_FOR_LIST
-#define CHECK_CODE
+#define RANGE_BASED_FOR_LIST
+//#define CHECK_CODE
 
 void main()
 {
