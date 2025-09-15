@@ -18,12 +18,12 @@ class List
 		{
 			cout << "EConstructor:\t" << this << endl;
 		}
-		~Element() 
+		~Element()
 		{
 			cout << "EDestructor:\t" << this << endl;
 		}
 		friend class List;
-	}*Head, *Tail;
+	}*Head, * Tail;
 
 	size_t size;
 public:
@@ -117,19 +117,19 @@ public:
 			return Temp->Data;
 		}
 	};
-	Iterator begin()
+	const Iterator begin() const
 	{
 		return Head;
 	}
-	Iterator end()
+	const Iterator end() const
 	{
 		return nullptr;
 	}
-	ReverseIterator rbegin()
+	const ReverseIterator rbegin() const
 	{
 		return Tail;
 	}
-	ReverseIterator rend()
+	const ReverseIterator rend() const
 	{
 		return nullptr;
 	}
@@ -147,12 +147,25 @@ public:
 		}
 		cout << "ILConstructor:\t " << endl;
 	}
+
+	List(const List& other)
+	{
+		*this = other;
+	}
 	~List()
 	{
-		while(Head) pop_front();
+		while (Head) pop_front();
 		cout << "LDestructor:\t" << this << endl;
 	}
 
+	List& operator=(const List& other)
+	{
+		if (this == &other) return *this;
+		while (Head) pop_front();
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_back(Temp->Data);
+		return *this;
+	}
 	// Adding Elements:
 	void push_front(int Data)
 	{
@@ -193,7 +206,7 @@ public:
 
 	void insert(int Data, int Index)
 	{
-		if (Index < 0) return; 
+		if (Index < 0) return;
 		if (Index == 0 || size == 0) return push_front(Data);
 		if (Index >= size) return push_back(Data);
 		//1) Доходим до нужного элемента
@@ -307,12 +320,19 @@ public:
 		cout << "Количество элементов списка: " << size << endl;
 		cout << delimiter << endl;
 	}
-}; 
+};
 
-
+List operator+ (const List& left, const List& right)
+{
+	List fusion = left;
+	for (List::Iterator it = right.begin(); it != right.end(); ++it)
+		fusion.push_back(*it);
+	return fusion;
+}
 
 
 //#define BASE_CHECK
+#define CHECK_CODE
 
 void main()
 {
@@ -342,12 +362,25 @@ void main()
 	list.erase(Index);
 	list.print();
 #endif // BASE_CHECK
+#ifdef CHECK_CODE
 	List list1 = { 3, 5, 8, 13, 21 };
 	List list2 = { 34, 55, 89 };
 	list1.print();
 	list2.print();
-	//List list3 = list1 + list2;
+	List list3 = list1 + list2;
 	for (int i : list1)cout << i << tab; cout << endl;
 	for (int i : list2)cout << i << tab; cout << endl;
-	//for (int i : list3)cout << i << tab; cout << endl;*/
+	for (int i : list3)cout << i << tab; cout << endl;
+	for (List::Iterator it = list1.begin(); it != list1.end(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+	for (List::ReverseIterator it = list1.rbegin(); it != list1.rend(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+#endif // CHECK_CODE
+
 }
