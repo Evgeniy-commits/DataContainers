@@ -33,6 +33,14 @@ public:
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
+	List(const std::initializer_list<int>& il) : List()
+	{
+		for (int const* it = il.begin(); it != il.end(); ++it)
+		{
+			push_back(*it);
+		}
+		cout << "ILConstructor:\t " << endl;
+	}
 	~List()
 	{
 		while (Head) pop_front();
@@ -196,7 +204,7 @@ public:
 }; 
 
 
-#define BASE_CHECK
+//#define BASE_CHECK
 
 void main()
 {
@@ -226,4 +234,12 @@ void main()
 	list.erase(Index);
 	list.print();
 #endif // BASE_CHECK
+	List list1 = { 3, 5, 8, 13, 21 };
+	List list2 = { 34, 55, 89 };
+	list1.print();
+	list2.print();
+	/*List list3 = list1 + list2;
+	for (int i : list1)cout << i << tab; cout << endl;
+	for (int i : list2)cout << i << tab; cout << endl;
+	for (int i : list3)cout << i << tab; cout << endl;*/
 }

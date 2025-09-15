@@ -265,23 +265,23 @@ public:
 	}
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 
-	void revers()
-	{
-		ForwardList revers;
-		while (Head)
-		{
-			revers.push_front(Head->Data); //добавляем Головной элемент в реверсный список
-			pop_front(); //удаляем начальный элемент списка
-		}
-		/*Head = revers.Head;
-		size = revers.size;*/
-		*this = std::move(revers); //встроенная функция, которая явным образом вызывает 
-		//moveAssignment если он есть
-		revers.Head = nullptr; //Поскольку реверсный список является локальной переменной ,
-		// для него будет вызван деструктор, который полностью его очистит, а он указывает на ту же
-		//память, что и наш объект, поэтому деструктор очистит полностью, чтобы этого не произошло
-		//зануляем список.
-	}
+	//void revers()
+	//{
+	//	ForwardList revers;
+	//	while (Head)
+	//	{
+	//		revers.push_front(Head->Data); //добавляем Головной элемент в реверсный список
+	//		pop_front(); //удаляем начальный элемент списка
+	//	}
+	//	/*Head = revers.Head;
+	//	size = revers.size;*/
+	//	*this = std::move(revers); //встроенная функция, которая явным образом вызывает 
+	//	//moveAssignment если он есть
+	//	revers.Head = nullptr; //Поскольку реверсный список является локальной переменной ,
+	//	// для него будет вызван деструктор, который полностью его очистит, а он указывает на ту же
+	//	//память, что и наш объект, поэтому деструктор очистит полностью, чтобы этого не произошло
+	//	//зануляем список.
+	//}
 	
 };
 
@@ -296,16 +296,16 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 	return fusion;
 }
 
-void print(int arr[])
-{
-	cout << typeid(arr).name() << endl;
-	cout << sizeof(arr) / sizeof(arr[0]) << endl;
-	/*for (int i : arr)
-	{
-		cout << i << tab;
-	}
-	cout << endl;*/
-}
+//void print(int arr[])
+//{
+//	cout << typeid(arr).name() << endl;
+//	cout << sizeof(arr) / sizeof(arr[0]) << endl;
+//	/*for (int i : arr)
+//	{
+//		cout << i << tab;
+//	}
+//	cout << endl;*/
+//}
 
 //#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
