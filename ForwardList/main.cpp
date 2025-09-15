@@ -15,6 +15,8 @@ template<typename T> class List
 		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr);
 		~Element();
 		friend class List;
+		friend class Iterator;
+		friend class ReverseIterator;
 		friend List<T> operator+(const List<T>& left, const List<T>& right);
 	} *Head, * Tail;
 
@@ -37,8 +39,7 @@ public:
 		bool operator!=(const Iterator& other)const;
 		T operator*() const;
 		T& operator*();
-		friend List;
-		friend Element;
+		friend class List;
 	};
 
 	class ReverseIterator
@@ -56,9 +57,7 @@ public:
 		bool operator!=(const ReverseIterator& other)const;
 		T operator*()const;		
 		T& operator*();
-		friend List;
-		friend Element;
-		
+		friend class List;
 	};
 public:
 	Element* get_Head() const;	
@@ -99,18 +98,18 @@ public:
 	void print()const;
 	void reverse_print()const;
 	void revers();
-	friend List<T>::Element;
-	friend List<T>::Iterator;
-	friend List<T>::ReverseIterator;
+	friend Element;
+	friend Iterator;
+	friend ReverseIterator;
 	friend List<T> operator+(const List<T>& left, const List<T>& right);
 };
 
 template <typename T> List<T> operator+(const List<T>& left, const List<T>& right)
 {
 	List<T> fusion;
-	for (List::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
+	for (List<T>::Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
-	for (List::Element* Temp = right.get_Head(); Temp; Temp = Temp->pNext)
+	for (List<T>::Element* Temp = right.get_Head(); Temp; Temp = Temp->pNext)
 		fusion.push_front(Temp->Data);
 	fusion.revers();
 	return fusion;
