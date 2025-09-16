@@ -2,7 +2,7 @@
 #include "List.cpp"
 #include <string>
 
-//#define BASE_CHECK
+#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
@@ -11,7 +11,7 @@
 //#define RANGE_BASED_FOR_ARRAY
 //#define RANGE_BASED_FOR_LIST
 //#define CHECK_CODE
-#define CHECK_CODE_A
+//#define CHECK_CODE_A
 
 void main()
 {
@@ -20,27 +20,19 @@ void main()
 #ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
-	List<double> list;
-	clock_t t_start = clock();
-	for (int i = 0; i < n; i++)
-	{
-		//list.push_front(rand() % 100);
-		list.push_back((double)(rand() % 100)/10);
-	}
-	clock_t t_end = clock();
-	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
-	system("PAUSE");
+	List<int> list;
+	list.filling(n);
 	//list.pop_front();
-	list.print();
+	//list.print();
 	//list.reverse_print();
 	//list.pop_back();
 	//list.print();
-	int Index;
+	//int Index;
 	//int value;
-	cout << "Введите индекс удаляемого элемента: "; cin >> Index;
+	//cout << "Введите индекс удаляемого элемента: "; cin >> Index;
 	//cout << "Введите значение добавляемого элемента: "; cin >> value;
-	list.erase(Index);
-	list.print();
+	//list.erase(Index);
+	//list.print();
 #endif // BASE_CHECK
 
 #ifdef OPERATOR_PLUS_CHECK
