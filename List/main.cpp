@@ -6,15 +6,15 @@ using namespace std;
 #define delimiter "\n-------------------------------------------------------\n"
 
 
-class List
+template<typename T> class List
 {
 	class Element
 	{
-		int Data;
+		T Data;
 		Element* pNext;
 		Element* pPrev;
 	public:
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev)
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev)
 		{
 			cout << "EConstructor:\t" << this << endl;
 		}
@@ -165,9 +165,9 @@ public:
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	List(const std::initializer_list<int>& il) : List()
+	List(const std::initializer_list<T>& il) : List()
 	{
-		for (int const* it = il.begin(); it != il.end(); ++it)
+		for (T const* it = il.begin(); it != il.end(); ++it)
 		{
 			push_back(*it);
 		}
@@ -193,7 +193,7 @@ public:
 		return *this;
 	}
 	// Adding Elements:
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		Element* New = new Element(Data);
 		if (Head == nullptr)
