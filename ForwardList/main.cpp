@@ -361,9 +361,9 @@ List operator+ (const List& left, const List& right)
 	return fusion;
 }
 
-//#define BASE_CHECK
+#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
-#define PERFORMANCE_CHECK
+//#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
