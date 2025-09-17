@@ -1,6 +1,5 @@
 #include <StLibList.h>
 #include <string>
-//#pragma comment(lib,"StaticLibraryList.lib")
 
 #define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK

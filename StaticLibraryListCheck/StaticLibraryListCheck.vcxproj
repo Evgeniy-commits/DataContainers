@@ -145,11 +145,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StaticLibraryList\StaticLibraryList.vcxproj">
-      <Project>{3f9ce216-94f6-4449-a44c-ce5d05fafa77}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

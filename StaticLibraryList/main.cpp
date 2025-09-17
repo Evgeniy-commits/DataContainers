@@ -1,5 +1,5 @@
 //#include "StLibList.h"
-//#include "StLibList.cpp"
+////#include "StLibList.cpp"
 //#include <string>
 //
 //#define BASE_CHECK
@@ -218,7 +218,3 @@
 //	cout << endl;
 //#endif // CHECK_CODE_A
 //}
-//
-//
-//
-//
