@@ -25,6 +25,7 @@ public:
 	class ConstBaseIterator
 	{
 	protected:
+
 		Element* Temp;
 	public:
 		ConstBaseIterator(Element* Temp = nullptr) : Temp(Temp) {}
