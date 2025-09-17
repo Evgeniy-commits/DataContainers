@@ -416,7 +416,8 @@ void main()
 		cout << *it << tab;
 	}
 	cout << endl;
-#endif // CHECK_CODE
+
+
 	List <std::string> s_list = { "Hello", "World" };
 	for (std::string i : s_list)cout << i << tab; cout << endl;
 
@@ -425,4 +426,6 @@ void main()
 		cout << *it << tab;
 	}
 	cout << endl;
+#endif // CHECK_CODE
+	
 }
