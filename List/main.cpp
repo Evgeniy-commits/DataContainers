@@ -15,14 +15,8 @@ template<typename T> class List
 		Element* pNext;
 		Element* pPrev;
 	public:
-		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev)
-		{
-			cout << "EConstructor:\t" << this << endl;
-		}
-		~Element()
-		{
-			cout << "EDestructor:\t" << this << endl;
-		}
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev);
+		~Element();
 		friend class List;
 	}*Head, * Tail;
 
@@ -127,227 +121,271 @@ public:
 		}
 	};
 
-	ConstIterator begin() const
-	{
-		return Head;
-	}
-	ConstIterator end() const
-	{
-		return nullptr;
-	}
-	ConstReverseIterator rbegin() const
-	{
-		return Tail;
-	}
-	ConstReverseIterator rend() const
-	{
-		return nullptr;
-	}
-	Iterator begin() 
-	{
-		return Head;
-	}
-	Iterator end() 
-	{
-		return nullptr;
-	}
-	ReverseIterator rbegin() 
-	{
-		return Tail;
-	}
-	ReverseIterator rend() 
-	{
-		return nullptr;
-	}
-
-	List()
-	{
-		Head = Tail = nullptr;
-		size = 0;
-		cout << "LConstructor:\t" << this << endl;
-	}
-	List(const std::initializer_list<T>& il) : List()
-	{
-		for (T const* it = il.begin(); it != il.end(); ++it)
-		{
-			push_back(*it);
-		}
-		cout << "ILConstructor:\t " << endl;
-	}
-
-	List(const List<T>& other)
-	{
-		*this = other;
-	}
-	~List()
-	{
-		while (Head) pop_front();
-		cout << "LDestructor:\t" << this << endl;
-	}
-
-	List<T>& operator=(const List<T>& other)
-	{
-		if (this == &other) return *this;
-		while (Head) pop_front();
-		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
-			push_back(Temp->Data);
-		return *this;
-	}
+	ConstIterator begin() const;
+	ConstIterator end() const;
+	ConstReverseIterator rbegin() const;
+	ConstReverseIterator rend() const;
+	Iterator begin();
+	Iterator end();
+	ReverseIterator rbegin();
+	ReverseIterator rend();
+	
+	List();
+	List(const std::initializer_list<T>& il);
+	List(const List<T>& other);
+	~List();
+	
+	List<T>& operator=(const List<T>& other);
+	
 	// Adding Elements:
-	void push_front(T Data)
-	{
-		Element* New = new Element(Data);
-		if (Head == nullptr)
-		{
-			Head = Tail = New;
-			size++;
-			return;
-		}
-		else
-		{
-			New->pNext = Head;
-			Head->pPrev = New;
-			Head = New;
-		}
-		//Head = Head->pPrev = new Element(Data, Head, nullptr);
-		size++;
-	}
-	void push_back(T Data)
-	{
-		Element* New = new Element(Data);
-		if (Tail == nullptr)
-		{
-			Head = Tail = New;
-			size++;
-			return;
-		}
-		else
-		{
-			New->pPrev = Tail;
-			Tail->pNext = New;
-			Tail = New;
-		}
-		//Tail = Tail->pNext = new Element(Data, nullptr, Tail);
-		size++;
-	}
-
-	void insert(T Data, int Index)
-	{
-		if (Index < 0) return;
-		if (Index == 0 || size == 0) return push_front(Data);
-		if (Index >= size) return push_back(Data);
-		//1) Доходим до нужного элемента
-		Element* Temp;
-		if (Index < size / 2)
-		{
-			Temp = Head;
-			for (int i = 0; i < Index; i++) Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (int i = 0; i < size - Index - 1; i++) Temp = Temp->pPrev;
-		}
-		//2) Создаем добавляемый элемент
-		Element* New = new Element(Data);
-		//3) Пристыковываем новый элемент к списку
-		New->pNext = Temp;
-		//4) Пристыковываем предыдущий элемент к новому
-		New->pPrev = Temp->pPrev;
-		//5) Говорим списку, где новый элемент
-		Temp->pPrev->pNext = New;
-		Temp->pPrev = New;
-		size++;
-	}
-
+	void push_front(T Data);
+	void push_back(T Data);
+	void insert(T Data, int Index);
+	
 	// Removing Elements
-
-	void pop_front()
-	{
-		if (Head == nullptr) return;
-		if (Head == Tail)
-		{
-			delete Head;
-			Head = Tail = nullptr;
-		}
-		else
-		{
-			Head = Head->pNext;
-			delete Head->pPrev;
-			Head->pPrev = nullptr;
-		}
-		size--;
-	}
-
-	void pop_back()
-	{
-		if (Tail == nullptr) return;
-		if (Head == Tail)
-		{
-			delete Tail;
-			Head = Tail = nullptr;
-		}
-		else
-		{
-			Tail = Tail->pPrev;
-			delete Tail->pNext;
-			Tail->pNext = nullptr;
-		}
-		size--;
-	}
-
-	void erase(int Index)
-	{
-		if (Index < 0) return;
-		if (Index == 0 || size == 0) return pop_front();
-		if (Index >= size) return pop_back();
-		//1) Доходим до нужного элемента
-		Element* Temp;
-		if (Index < size / 2)
-		{
-			Temp = Head;
-			for (int i = 0; i < Index; i++) Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (int i = 0; i < size - Index - 1; i++) Temp = Temp->pPrev;
-		}
-		//2) Создаем удаляемый элемент
-		Element* Erase = Temp;
-		Temp->pPrev->pNext = Temp->pNext;
-		Temp->pNext->pPrev = Temp->pPrev;
-		delete Erase;
-		size--;
-	}
-
+	void pop_front();
+	void pop_back();
+	void erase(int Index);
+	
 	//    Methods
-	void print()const
-	{
-		cout << delimiter << endl;
-		cout << Head << endl;
-		cout << delimiter << endl;
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << delimiter << endl;
-		cout << Tail << endl;
-		cout << "Количество элементов списка: " << size << endl;
-		cout << delimiter << endl;
-	}
-
-	void reverse_print()const
-	{
-		cout << delimiter << endl;
-		cout << Tail << endl;
-		cout << delimiter << endl;
-		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << delimiter << endl;
-		cout << Head << endl;
-		cout << "Количество элементов списка: " << size << endl;
-		cout << delimiter << endl;
-	}
+	void print()const;
+	void reverse_print()const;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T> List<T>::Element List<T>:: Element(T Data, Element* pNext, Element* pPrev) : Data(Data), pNext(pNext), pPrev(pPrev){}
+template<typename T> List<T>::Element List<T>:: ~Element() {}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T> List<T>::ConstIterator List<T>:: begin() const
+{
+	return Head;
+}
+template<typename T> List<T>::ConstIterator List<T>:: end() const
+{
+	return nullptr;
+}
+template<typename T> List<T>::ConstReverseIterator List<T>:: rbegin() const
+{
+	return Tail;
+}
+template<typename T> List<T>::ConstReverseIterator List<T>:: rend() const
+{
+	return nullptr;
+}
+template<typename T> List<T>::Iterator List<T>:: begin()
+{
+	return Head;
+}
+template<typename T> List<T>::Iterator List<T>::end()
+{
+	return nullptr;
+}
+template<typename T> List<T>::ReverseIterator List<T>::rbegin()
+{
+	return Tail;
+}
+template<typename T> List<T>::ReverseIterator List<T>::rend()
+{
+	return nullptr;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T> List<T>:: List()
+{
+	Head = Tail = nullptr;
+	size = 0;
+	cout << "LConstructor:\t" << this << endl;
+}
+template<typename T> List<T>:: List(const std::initializer_list<T>& il) : List()
+{
+	for (T const* it = il.begin(); it != il.end(); ++it)
+	{
+		push_back(*it);
+	}
+	cout << "ILConstructor:\t " << endl;
+}
+
+template<typename T> List<T>:: List(const List<T>& other)
+{
+	*this = other;
+}
+template<typename T> List<T>:: ~List()
+{
+	while (Head) pop_front();
+	cout << "LDestructor:\t" << this << endl;
+}
+
+template<typename T> List<T>& List<T>:: operator=(const List<T>& other)
+{
+	if (this == &other) return *this;
+	while (Head) pop_front();
+	for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+		push_back(Temp->Data);
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+// Adding Elements:
+
+template<typename T> void List<T>:: push_front(T Data)
+{
+	Element* New = new Element(Data);
+	if (Head == nullptr)
+	{
+		Head = Tail = New;
+		size++;
+		return;
+	}
+	else
+	{
+		New->pNext = Head;
+		Head->pPrev = New;
+		Head = New;
+	}
+	//Head = Head->pPrev = new Element(Data, Head, nullptr);
+	size++;
+}
+
+template<typename T> void List<T>:: push_back(T Data)
+{
+	Element* New = new Element(Data);
+	if (Tail == nullptr)
+	{
+		Head = Tail = New;
+		size++;
+		return;
+	}
+	else
+	{
+		New->pPrev = Tail;
+		Tail->pNext = New;
+		Tail = New;
+	}
+	//Tail = Tail->pNext = new Element(Data, nullptr, Tail);
+	size++;
+}
+
+template<typename T> void List<T>:: insert(T Data, int Index)
+{
+	if (Index < 0) return;
+	if (Index == 0 || size == 0) return push_front(Data);
+	if (Index >= size) return push_back(Data);
+	Element* Temp;
+	if (Index < size / 2)
+	{
+		Temp = Head;
+		for (int i = 0; i < Index; i++) Temp = Temp->pNext;
+	}
+	else
+	{
+		Temp = Tail;
+		for (int i = 0; i < size - Index - 1; i++) Temp = Temp->pPrev;
+	}
+	Element* New = new Element(Data);
+	New->pNext = Temp;
+	New->pPrev = Temp->pPrev;
+	Temp->pPrev->pNext = New;
+	Temp->pPrev = New;
+	size++;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+// Removing Elements
+
+template<typename T> void List<T>:: pop_front()
+{
+	if (Head == nullptr) return;
+	if (Head == Tail)
+	{
+		delete Head;
+		Head = Tail = nullptr;
+	}
+	else
+	{
+		Head = Head->pNext;
+		delete Head->pPrev;
+		Head->pPrev = nullptr;
+	}
+	size--;
+}
+
+template<typename T> void List<T>:: pop_back()
+{
+	if (Tail == nullptr) return;
+	if (Head == Tail)
+	{
+		delete Tail;
+		Head = Tail = nullptr;
+	}
+	else
+	{
+		Tail = Tail->pPrev;
+		delete Tail->pNext;
+		Tail->pNext = nullptr;
+	}
+	size--;
+}
+
+template<typename T> void List<T>:: erase(int Index)
+{
+	if (Index < 0) return;
+	if (Index == 0 || size == 0) return pop_front();
+	if (Index >= size) return pop_back();
+	Element* Temp;
+	if (Index < size / 2)
+	{
+		Temp = Head;
+		for (int i = 0; i < Index; i++) Temp = Temp->pNext;
+	}
+	else
+	{
+		Temp = Tail;
+		for (int i = 0; i < size - Index - 1; i++) Temp = Temp->pPrev;
+	}
+	Element* Erase = Temp;
+	Temp->pPrev->pNext = Temp->pNext;
+	Temp->pNext->pPrev = Temp->pPrev;
+	delete Erase;
+	size--;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+//    Methods
+template<typename T> void List<T>:: print()const
+{
+	cout << delimiter << endl;
+	cout << Head << endl;
+	cout << delimiter << endl;
+	for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+		cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+	cout << delimiter << endl;
+	cout << Tail << endl;
+	cout << "Количество элементов списка: " << size << endl;
+	cout << delimiter << endl;
+}
+
+template<typename T> void List<T>::reverse_print()const
+{
+	cout << delimiter << endl;
+	cout << Tail << endl;
+	cout << delimiter << endl;
+	for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+		cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+	cout << delimiter << endl;
+	cout << Head << endl;
+	cout << "Количество элементов списка: " << size << endl;
+	cout << delimiter << endl;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T> List<T> operator+ (const List<T>& left, const List<T>& right)
 {
