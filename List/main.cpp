@@ -15,8 +15,8 @@ template<typename T> class List
 		Element* pNext;
 		Element* pPrev;
 	public:
-		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev) {};
-		~Element() {};
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr);
+		~Element();
 		friend class List;
 	}*Head, * Tail;
 
@@ -27,7 +27,7 @@ template<typename T> class List
 	protected:
 		Element* Temp;
 	public:
-		ConstBaseIterator(Element* Temp = nullptr) : Temp(Temp) {};
+		ConstBaseIterator(Element* Temp = nullptr);
 		~ConstBaseIterator() {};
 		bool operator==(const ConstBaseIterator& other)const;
 		bool operator!=(const ConstBaseIterator& other)const;
@@ -145,7 +145,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-template<typename T> List<T>::Element:: Element(T Data, Element* pNext, Element* pPrev) : Data(Data), pNext(pNext), pPrev(pPrev){}
+template<typename T> List<T>::Element::Element(T Data, Element* pNext, Element* pPrev) : Data(Data), pNext(pNext), pPrev(pPrev){}
 template<typename T> List<T>::Element:: ~Element() {}
 
 ///////////////////////////////////////////////////////////////////////////////////////
