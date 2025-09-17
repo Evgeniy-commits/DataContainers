@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <string>
 using namespace std;
 
 #define tab  "\t"
@@ -360,7 +361,7 @@ template<typename T> List<T> operator+ (const List<T>& left, const List<T>& righ
 
 
 //#define BASE_CHECK
-#define CHECK_CODE
+//#define CHECK_CODE
 
 void main()
 {
@@ -368,12 +369,12 @@ void main()
 #ifdef BASE_CHECK
 	int n;
 	cout << "¬ведите размер списка: "; cin >> n;
-	List list;
+	List<double> list;
 	clock_t t_start = clock();
 	for (int i = 0; i < n; i++)
 	{
 		//list.push_front(rand() % 100);
-		list.push_back(rand() % 100);
+		list.push_back((double)(rand() % 100) / 10);
 	}
 	clock_t t_end = clock();
 	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
@@ -416,5 +417,12 @@ void main()
 	}
 	cout << endl;
 #endif // CHECK_CODE
+	List <std::string> s_list = { "Hello", "World" };
+	for (std::string i : s_list)cout << i << tab; cout << endl;
 
+	for (List<std::string>::ConstReverseIterator it = s_list.rbegin(); it != s_list.rend(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
 }
