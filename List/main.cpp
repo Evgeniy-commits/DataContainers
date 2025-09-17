@@ -174,7 +174,7 @@ public:
 		cout << "ILConstructor:\t " << endl;
 	}
 
-	List(const List& other)
+	List(const List<T>& other)
 	{
 		*this = other;
 	}
@@ -184,7 +184,7 @@ public:
 		cout << "LDestructor:\t" << this << endl;
 	}
 
-	List& operator=(const List& other)
+	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other) return *this;
 		while (Head) pop_front();
@@ -211,7 +211,7 @@ public:
 		//Head = Head->pPrev = new Element(Data, Head, nullptr);
 		size++;
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		Element* New = new Element(Data);
 		if (Tail == nullptr)
@@ -230,7 +230,7 @@ public:
 		size++;
 	}
 
-	void insert(int Data, int Index)
+	void insert(T Data, int Index)
 	{
 		if (Index < 0) return;
 		if (Index == 0 || size == 0) return push_front(Data);
@@ -348,7 +348,7 @@ public:
 	}
 };
 
-List operator+ (const List& left, const List& right)
+template<typename> List operator+ (const List<T>& left, const List<T>& right)
 {
 	List fusion = left;
 	for (List::ConstIterator it = right.begin(); it != right.end(); ++it)
@@ -391,11 +391,11 @@ void main()
 	list.print();
 #endif // BASE_CHECK
 #ifdef CHECK_CODE
-	List list1 = { 3, 5, 8, 13, 21 };
-	List list2 = { 34, 55, 89 };
+	List<int> list1 = { 3, 5, 8, 13, 21 };
+	List<int> list2 = { 34, 55, 89 };
 	list1.print();
 	list2.print();
-	List list3 = list1 + list2;
+	List<int> list3 = list1 + list2;
 	for (int i : list1)cout << i << tab; cout << endl;
 	for (int i : list2)cout << i << tab; cout << endl;
 	for (int i : list3)cout << i << tab; cout << endl;
