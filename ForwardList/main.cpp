@@ -5,18 +5,18 @@ using namespace std;
 #define tab  "\t"
 #define delimiter "\n-------------------------------------------------------------\n"
 
-class ForwardList;
-class Element
+template<typename T> class ForwardList;
+
+template<typename T> class Element
 {
-	int Data;
+	T Data;
 	Element* pNext;
-	static int count;
 public:
-	Element(int Data, Element* pNext = nullptr)
+	Element(T Data, Element* pNext = nullptr)
 	{
 		this->Data = Data;
 		this->pNext = pNext;
-		count++;
+
 #ifdef DEBUG
 		cout << "EConstructor:\t" << this << endl;
 #endif // DEBUG
@@ -25,20 +25,14 @@ public:
 
 	~Element()
 	{
-		count--;
 #ifdef DEBUG
 		cout << "EDestructor:\t" << this << endl;
 #endif // DEBUG
-
 	}
-	friend class ForwardList;
-	friend class Iterator;
-	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
+	friend class ForwardList<T>;
 };
 
-int Element::count = 0;
-
-class Iterator
+template<typename T> class Iterator
 {
 	Element* Temp;
 public:
@@ -79,7 +73,7 @@ public:
 	}
 };
 
-class ForwardList
+template<typename T> class ForwardList
 {
 	Element* Head;
 	size_t size;
@@ -104,8 +98,6 @@ public:
 	{
 		Head = nullptr;
 		size = 0;
-		Element::count = 0;
-		//если список пуст, то его Голова обязательно указывает на 0;
 		cout << "FLConstructor:\t" << this << endl;
 	}
 	explicit ForwardList(int size) :ForwardList()
@@ -113,10 +105,10 @@ public:
 		while (size--) push_front(0);
 		cout << "FLSizeConstructor:\t" << this << endl;
 	}
-	ForwardList(const std::initializer_list<int>& il) :ForwardList()
+	ForwardList(const std::initializer_list<T>& il) :ForwardList()
 	{
 		cout << typeid(il.begin()).name() << endl;
-		for (int const* it = il.begin(); it != il.end(); it++)
+		for (T const* it = il.begin(); it != il.end(); it++)
 		{
 			push_back(*it);
 		}
@@ -124,13 +116,11 @@ public:
 	}
 	ForwardList(const ForwardList& other) : ForwardList()
 	{
-		//Deep copy (побитовое копирование)
 		*this = other;
 		cout << "FLCopyConstructor:\t" << this << endl;
 	}
 	ForwardList(ForwardList&& other) noexcept : ForwardList()
 	{
-		//Shallow copy (побитовое копирование)
 		*this = std::move(other);
 		cout << "FLMoveConstructor:\t" << this << endl;
 	}
@@ -285,7 +275,7 @@ public:
 	
 };
 
-ForwardList operator+(const ForwardList& left, const ForwardList& right)
+template<typename T> ForwardList operator+(const ForwardList& left, const ForwardList& right)
 {
 	ForwardList fusion;
 	for (Element* Temp = left.get_Head(); Temp; Temp = Temp->pNext)
@@ -296,24 +286,13 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 	return fusion;
 }
 
-//void print(int arr[])
-//{
-//	cout << typeid(arr).name() << endl;
-//	cout << sizeof(arr) / sizeof(arr[0]) << endl;
-//	/*for (int i : arr)
-//	{
-//		cout << i << tab;
-//	}
-//	cout << endl;*/
-//}
-
 //#define BASE_CHECK
 //#define OPERATOR_PLUS_CHECK
 //#define PERFORMANCE_CHECK
 //#define SUBSCRIPT_OPERATOR_CHECK
 //#define COPY_SEMANTIC_PERFORMANCE_CHECK
 //#define MOVE_SEMANTIC_CHECK
-//#define RANGE_BASED_FOR_ARRAY
+//#define CHECK_CODE
 
 void main()
 {
@@ -451,26 +430,7 @@ void main()
 	cout << "ForwardList4 filled " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 #endif // MOVE_SEMANTIC_CHECK
 
-#ifdef RANGE_BASED_FOR_ARRAY
-	int arr[] = { 3, 5, 8, 13, 21 };
-	for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
-	{
-		cout << arr[i] << tab;
-	}
-	cout << endl;
-
-	//Range-based for - for для диапазонаю Под диапазоном понимается контейнер
-	//(какой-то набор элементов)
-
-	for (int i : arr)
-	{
-		cout << i << tab;
-	}
-	cout << endl;
-	cout << typeid(arr).name() << endl;
-	print(arr);
-#endif // RANGE_BASED_FOR_ARRAY
-
+#ifdef CHECK_CODE
 	ForwardList list = { 3, 5, 8, 13, 21 };
 	for (int i : list) cout << i << tab; cout << endl;
 	cout << delimiter << endl;
@@ -478,5 +438,31 @@ void main()
 	{
 		cout << *it << tab;
 	}
-	cout << endl;	
+	cout << endl;
+
+	List list1 = { 3, 5, 8, 13, 21 };
+	List list2 = { 34, 55, 89 };
+	list1.print();
+	list2.print();
+	List list3 = list1 + list2;
+	for (int i : list1)cout << i << tab; cout << endl;
+	for (int i : list2)cout << i << tab; cout << endl;
+	for (int i : list3)cout << i << tab; cout << endl;
+	for (List::ConstIterator it = list1.begin(); it != list1.end(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+	for (List::Iterator it = list1.begin(); it != list1.end(); ++it)
+	{
+		*it *= 100;
+		cout << *it << tab;
+	}
+	cout << endl;
+	for (List::ConstReverseIterator it = list1.rbegin(); it != list1.rend(); ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+#endif // CHECK_CODE
 }
