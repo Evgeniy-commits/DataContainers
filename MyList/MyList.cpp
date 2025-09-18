@@ -1,8 +1,7 @@
-#include "List.h"
+#include "MyList.h"
 
 template<typename T> List<T>::Element::Element(T Data, Element* pNext, Element* pPrev) :
-	Data(Data), pNext(pNext), pPrev(pPrev) {
-}
+	Data(Data), pNext(pNext), pPrev(pPrev) {}
 template<typename T> List<T>::Element::~Element() {}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
