@@ -5,14 +5,14 @@ using namespace std;
 #define tab  "\t"
 #define delimiter "\n-------------------------------------------------------------\n"
 
-template<typename T> class ForwardList;
+class ForwardList;
 
-template<typename T> class Element
+class Element
 {
-	T Data;
+	int Data;
 	Element* pNext;
 public:
-	Element(T Data, Element* pNext = nullptr)
+	Element(int Data, Element* pNext = nullptr)
 	{
 		this->Data = Data;
 		this->pNext = pNext;
@@ -29,10 +29,11 @@ public:
 		cout << "EDestructor:\t" << this << endl;
 #endif // DEBUG
 	}
-	friend class ForwardList<T>;
+	friend class Iterator;
+	friend class ForwardList;
 };
 
-template<typename T> class Iterator
+class Iterator
 {
 	Element* Temp;
 public:
@@ -73,7 +74,7 @@ public:
 	}
 };
 
-template<typename T> class ForwardList
+class ForwardList
 {
 	Element* Head;
 	size_t size;
@@ -105,10 +106,10 @@ public:
 		while (size--) push_front(0);
 		cout << "FLSizeConstructor:\t" << this << endl;
 	}
-	ForwardList(const std::initializer_list<T>& il) :ForwardList()
+	ForwardList(const std::initializer_list<int>& il) :ForwardList()
 	{
 		cout << typeid(il.begin()).name() << endl;
-		for (T const* it = il.begin(); it != il.end(); it++)
+		for (int const* it = il.begin(); it != il.end(); it++)
 		{
 			push_back(*it);
 		}
@@ -251,7 +252,6 @@ public:
 		for(Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "Количество элементов списка: " << size << endl;
-		cout << "Общее количество элементов: " << Element::count << endl;
 	}
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 
