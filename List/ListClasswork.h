@@ -7,7 +7,8 @@ using namespace std;
 
 #define tab  "\t"
 #define delimiter "\n-------------------------------------------------------\n"
-
+/////////////////////////////////////////////////////////////////////////////
+///                          Class Declaration                        ///////
 
 template<typename T> class List
 {
@@ -102,9 +103,16 @@ public:
 	void reverse_print()const;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+///                          Class Declaration end                       ///////
+
 template<typename T> List<T> operator+ (const List<T>& left, const List<T>& right);
 
-///////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////                          Class Definition                       ///////
+
+
 
 //template<typename T> List<T>::Element::Element(T Data, Element* pNext, Element* pPrev) : Data(Data), pNext(pNext), pPrev(pPrev) {}
 //template<typename T> List<T>::Element:: ~Element() {}
@@ -437,3 +445,6 @@ template<typename T> List<T> operator+ (const List<T>& left, const List<T>& righ
 //	}
 //	return fusion;
 //}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////                          Class Definition  end                  ///////
