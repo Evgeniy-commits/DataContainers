@@ -16,11 +16,11 @@ class List
 	public:
 		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) : Data(Data), pNext(pNext), pPrev(pPrev)
 		{
-			cout << "EConstructor:\t" << this << endl;
+			//cout << "EConstructor:\t" << this << endl;
 		}
 		~Element()
 		{
-			cout << "EDestructor:\t" << this << endl;
+			//cout << "EDestructor:\t" << this << endl;
 		}
 		friend class List;
 	}*Head, * Tail;
@@ -180,7 +180,11 @@ public:
 	}
 	~List()
 	{
+		clock_t t_start = clock();
 		while (Head) pop_front();
+		clock_t t_end = clock();
+		cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
+		system("PAUSE");
 		cout << "LDestructor:\t" << this << endl;
 	}
 
@@ -359,8 +363,8 @@ List operator+ (const List& left, const List& right)
 }
 
 
-//#define BASE_CHECK
-#define CHECK_CODE
+#define BASE_CHECK
+//#define CHECK_CODE
 
 void main()
 {
@@ -379,16 +383,16 @@ void main()
 	cout << "List filled. " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. ";
 	system("PAUSE");
 	//list.pop_front();
-	list.print();
+	//list.print();
 	//list.reverse_print();
 	//list.pop_back();
 	//list.print();
-	int Index;
-	int value;
-	cout << "Введите индекс добавляемого элемента: "; cin >> Index;
+	//int Index;
+	//int value;
+	//cout << "Введите индекс добавляемого элемента: "; cin >> Index;
 	//cout << "Введите значение добавляемого элемента: "; cin >> value;
-	list.erase(Index);
-	list.print();
+	//list.erase(Index);
+	//list.print();
 #endif // BASE_CHECK
 #ifdef CHECK_CODE
 	List list1 = { 3, 5, 8, 13, 21 };
