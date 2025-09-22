@@ -4,7 +4,7 @@ using namespace std;
 void elevator(int floor);
 unsigned long long factorial(int number);
 double power(double base, int exponent);
-int fibonachy(int n);
+unsigned long long fibonachy(int n);
 void printFib(int limit);
 
 void main()
@@ -54,7 +54,7 @@ double power(double base, int exponent)
 		   base * power(base, exponent - 1);
 }
 
-int fibonachy(int n) 
+unsigned long long fibonachy(int n) 
 {
 	return n <= 1 ? n : (fibonachy(n - 1) + fibonachy(n - 2));
 }
