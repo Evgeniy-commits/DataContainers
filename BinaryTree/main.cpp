@@ -22,16 +22,16 @@ protected:
 		friend class Tree;
 		friend class UniqueTree;
 	} *Root;
-
 public:
-	Element* getRoot() const
-	{
-		return Root;
-	}
 	Tree()
 	{
 		Root = nullptr;
 		cout << "TConstructor:\t" << this << endl;
+	}
+	Tree(const std::initializer_list<int>& il): Tree()
+	{
+		for(int i : il) insert(i);		
+		cout << "ILConstructor:\t" << this << endl;
 	}
 	Tree(const Tree& other) : Tree()
 	{
@@ -46,10 +46,61 @@ public:
 	}
 	~Tree()
 	{
-		clear(Root);
+		clear();
 		cout << "TDestructor:\t" << this << endl;
 	}
+	Element* getRoot() const
+	{
+		return Root;
+	}
+	void insert(int Data)
+	{
+		insert(Data, Root);
+	}
+	void erase(int Data)
+	{
+		erase(Data, Root);
+	}
+	int minValue()const
+	{
+		return minValue(Root);
+	}
+	int maxValue()const
+	{
+		return maxValue(Root);
+	}
+	int count()const
+	{
+		return count(Root);
+	}
+	int Sum()const
+	{
+		return Sum(Root);
+	}
+	double Avg() const
+	{
+		return Sum(Root) / count(Root);
+	}
+	void print()const
+	{
+		print(Root);
+		cout << endl;
+	}
+	void copy()
+	{
+		copy(Root);
+	}
+	void clear()
+	{	
+		clear(Root);	
+		Root = nullptr;
+	}
+	/*bool find(int Data)
+	{
+		return find(Data, Root);
+	}*/
 
+private:
 	///// operators
 	Tree& operator=(const Tree& other)
 	{
@@ -71,10 +122,6 @@ public:
 		return *this;
 	}
 
-	void insert(int Data)
-	{
-		insert(Data, this->Root);
-	}
 	void insert(int Data, Element* Root)
 	{
 		if (this->Root == nullptr) this->Root = new Element(Data);
@@ -90,27 +137,12 @@ public:
 			else insert(Data, Root->pRight);
 		}
 	}
-	bool find(int Data)
+	
+	void erase(int Data, Element*& Root)
 	{
-		if (this->Root == nullptr) return false;
-		if (_find(Data, Root) != nullptr) return true;	
-	}
-	Element* _find(int Data, Element* Root)
-	{
-		if (Root == nullptr) return nullptr;
-		if (Data == Root->Data)	return Root;
-		else if (Data < Root->Data)	return _find(Data, Root->pLeft);
-		else return _find(Data, Root->pRight);
-	}
-	void erase(int Data) 
-	{
-		if (this->Root != nullptr) this->Root = _erase(Data, Root);
-	}
-	Element* _erase(int Data, Element* Root)
-	{
-		if (Root == nullptr) return nullptr;
-		if (Data < Root->Data) Root->pLeft = _erase(Data, Root->pLeft);
-		else if (Data > Root->Data) Root->pRight = _erase(Data, Root->pRight);
+		if (Root == nullptr) return;
+		erase(Data, Root->pLeft);
+		erase(Data, Root->pRight);
 		if (Data == Root->Data)
 		{
 			if (Root->pLeft == Root->pRight)
@@ -118,18 +150,20 @@ public:
 				delete Root;
 				Root = nullptr;
 			}
-			else if (Root->pLeft == nullptr) return Root->pRight;
-			else if (Root->pRight == nullptr) return Root->pLeft;
 			else
 			{
-				/*Element* replace_root = Root->pRight;
-				while (replace_root->pLeft) replace_root = replace_root->pLeft;
-				Root->Data = replace_root->Data;*/
-				Root->Data = minValue(Root->pRight);
-				Root->pRight = _erase(minValue(Root->pRight), Root->pRight);
+				if (count(Root->pLeft) > count(Root->pRight))
+				{
+					Root->Data = maxValue(Root->pLeft);
+					erase(maxValue(Root->pLeft), Root ->pLeft);
+				}
+				else
+				{
+					Root->Data = minValue(Root->pRight);
+					erase(maxValue(Root->pRight), Root->pRight);
+				}
 			}
 		}
-		return Root;
 	}
 	int minValue(Element* Root)const
 	{
@@ -147,10 +181,7 @@ public:
 	{
 		return Root ? Sum(Root->pLeft) + Sum(Root->pRight) + Root->Data : 0;
 	}
-	int Avg() const
-	{
-		return (double)Sum(Root) / count(Root);
-	}
+	
 	void copy(Element* Root)
 	{
 		if (Root == nullptr) return;
@@ -158,7 +189,7 @@ public:
 		copy(Root->pLeft);
 		copy(Root->pRight);
 	}
-	void clear(Element* Root)
+	void clear(Element*& Root)
 	{
 		if (Root == nullptr) return;
 		clear(Root->pLeft);
@@ -177,7 +208,6 @@ public:
 
 class UniqueTree : public Tree
 {
-public:
 	void insert(int Data, Element* Root)
 	{
 		if (this->Root == nullptr)this->Root = new Element(Data);
@@ -195,9 +225,15 @@ public:
 			else insert(Data, Root->pRight);
 		}
 	}
+public:
+	void insert(int Data)
+	{
+		insert(Data, Root);
+	}	
 };
 
-#define BASE_CHECK
+//#define BASE_CHECK
+#define ERASE_CHECK
 //#define MOVE_SEMANTIC
 
 void main()
@@ -210,42 +246,52 @@ void main()
 	Tree tree;
 	for (int i = 0; i < n; i++)
 	{
-		tree.insert(rand() % 100, tree.getRoot());
+		tree.insert(rand() % 100);
 	}
-	tree.print(tree.getRoot());
+	tree.print();
 	cout << endl;
 	cout << delimiter;
-	cout << "MIN " << tree.minValue(tree.getRoot());
+	cout << "MIN " << tree.minValue();
 	cout << endl;
-	cout << "MAX " << tree.maxValue(tree.getRoot());
+	cout << "MAX " << tree.maxValue();
 	cout << endl;
-	cout << "COUNT " << tree.count(tree.getRoot());
+	cout << "COUNT " << tree.count();
 	cout << endl;
-	cout << "SUM " << tree.Sum(tree.getRoot());
+	cout << "SUM " << tree.Sum();
 	cout << endl;
 	cout << "AVG " << tree.Avg();
 	cout << endl;
 	cout << delimiter;
-	cout<< tree.find(34);
+	//cout<< tree.find(34);
 	cout << delimiter;
+
 	UniqueTree utree;
-	for (;utree.count(utree.getRoot()) < n;)
+	for (;utree.count() < n;)
 	{
-		utree.insert(rand() % 100, utree.getRoot());
+		utree.insert(rand() % 100);
 	}
-	utree.print(utree.getRoot());
+	utree.print();
 	cout << endl;
-	cout << "COUNT " << utree.count(utree.getRoot());
+	cout << "COUNT " << utree.count();
 	cout << endl;
 	cout << delimiter;
-	cout << utree.find(18);
+	//cout << utree.find(18);
 	cout << delimiter;
 	utree.erase(27);
-	utree.print(utree.getRoot());
+	utree.print();
 	cout << endl;
-	cout << "COUNT " << utree.count(utree.getRoot());
+	cout << "COUNT " << utree.count();
 	cout << delimiter;
 #endif // BASE_CHECK
+
+#ifdef ERASE_CHECK
+	Tree tree = { 50, 25, 75, 16, 32, 58, 85};
+	tree.print();
+	cout << delimiter;
+	tree.erase(50);
+	tree.print();
+	cout << delimiter;
+#endif // ERASE_CHECK
 
 #ifdef MOVE_SEMANTIC
 
