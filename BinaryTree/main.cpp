@@ -114,7 +114,7 @@ public:
 		if (Root == nullptr) return nullptr;
 		if (Data < Root->Data) Root->pLeft = _erase(Data, Root->pLeft);
 		else if (Data > Root->Data) Root->pRight = _erase(Data, Root->pRight);
-		else/*if (Data == Root->Data)*/
+		if (Data == Root->Data)
 		{
 			if (Root->pLeft == Root->pRight)
 			{
