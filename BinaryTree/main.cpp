@@ -47,7 +47,6 @@ public:
 	~Tree()
 	{
 		clear(Root);
-		Root = nullptr;
 		cout << "TDestructor:\t" << this << endl;
 	}
 
@@ -165,6 +164,7 @@ public:
 		clear(Root->pLeft);
 		clear(Root->pRight);
 		delete Root;
+		Root = nullptr;
 	}
 	void print(Element* Root)const
 	{
