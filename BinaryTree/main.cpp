@@ -91,6 +91,11 @@ public:
 			else insert(Data, Root->pRight);
 		}
 	}
+	bool find(int Data)
+	{
+		if (this->Root == nullptr) return false;
+		if (_find(Data, Root) != nullptr) return true;	
+	}
 	Element* _find(int Data, Element* Root)
 	{
 		if (Root == nullptr) return nullptr;
@@ -98,13 +103,6 @@ public:
 		else if (Data < Root->Data)	return _find(Data, Root->pLeft);
 		else return _find(Data, Root->pRight);
 	}
-
-	bool find(int Data)
-	{
-		if (this->Root == nullptr) return false;
-		if (_find(Data, Root) != nullptr) return true;	
-	}
-		
 	void erase(int Data) 
 	{
 		if (this->Root != nullptr) this->Root = _erase(Data, Root);
@@ -121,7 +119,7 @@ public:
 				delete Root;
 				Root = nullptr;
 			}
-			else if (Root->pLeft == nullptr)	return Root->pRight;
+			else if (Root->pLeft == nullptr) return Root->pRight;
 			else if (Root->pRight == nullptr) return Root->pLeft;
 			else
 			{
