@@ -135,11 +135,7 @@ public:
 		clear(Root);
 		Root = nullptr;
 	}
-	/*bool find(int Data)
-	{
-		return find(Data, Root);
-	}*/
-
+	
 private:
 	///// operators
 	Tree& operator=(const Tree& other)
@@ -195,29 +191,30 @@ private:
 				if (count(Root->pLeft) > count(Root->pRight))
 				{
 					Root->Data = maxValue(Root->pLeft);
-					erase(maxValue(Root->pLeft), Root->pLeft);
+					erase(Root->Data, Root->pLeft);
 				}
 				else
 				{
 					Root->Data = minValue(Root->pRight);
-					erase(maxValue(Root->pRight), Root->pRight);
+					erase(Root->Data, Root->pRight);
 				}
 			}
 		}
 	}
-	void balance(Element*& Root)
+	void balance(Element* Root)
 	{
 		if (Root == nullptr) return;
-		if (count(Root->pLeft) - count(Root->pRight) < -1 || count(Root->pLeft) - count(Root->pRight) > 1)
+		while(depth(Root->pLeft) - depth(Root->pRight) < -1 || depth(Root->pLeft) - depth(Root->pRight) > 1)
 		{
-			Element* buffer = this->Root;
+			int buffer = Root->Data;
 			erase(Root->Data);
-			insert(buffer->Data);
+			insert(buffer);
 		}
-		//balance(Root->pRight);
-		//balance(Root->pLeft);
+		cout << "LH" << depth(Root->pLeft) << endl;
+		cout << "RH" << depth(Root->pRight) << endl;
+		cout << "LC" << count(Root->pLeft) << endl;
+		cout << "RC" << count(Root->pRight) << endl;
 	}
-
 	int minValue(Element* Root)const
 	{
 		return Root == nullptr ? 0 : Root->pLeft ? minValue(Root->pLeft) : Root->Data;
@@ -263,41 +260,34 @@ private:
 		if (Root == nullptr) return;
 		print(Root->pLeft);
 		cout << Root->Data << tab;
-		print(Root->pRight);
+		print(Root->pRight);	
 	}
 	
 	void printLevel(Element* Root, int level)const
 	{
-		if (Root == nullptr) 
+		if (Root == nullptr)
 		{
-			cout << tab << tab;
+			cout << "-- ";
 			return;
 		}
 		if (level == 1)
 		{
-			//if (Root->Data != 0) cout << Root->Data; cout << tab << tab;
-			cout << Root->Data << tab << tab;
-			//if (Root->pRight == nullptr)  cout << tab << tab;
+			cout << Root->Data << "  ";
 		}
 		else if (level > 1)
 		{
 			printLevel(Root->pLeft, level - 1);
 			printLevel(Root->pRight, level - 1);
 		}
-		//if (Root->pLeft == nullptr || Root->pRight == nullptr) cout << tab << tab;
 	}
-
 	void treePrint(Element* Root)const
 	{
 		for (int tabCount = depth(Root), i = 1; i <= depth(Root); i++, tabCount--)
 		{
-			for (int j = 0; j <= tabCount; j++) cout << tab;
 			printLevel(Root, i);
 			cout << endl;
 		}
 	}
-
-
 };
 
 class UniqueTree : public Tree
@@ -326,8 +316,8 @@ public:
 	}
 };
 
-#define ERASE_CHECK
-//#define BASE_CHECK
+//#define ERASE_CHECK
+#define BASE_CHECK
 //#define MOVE_SEMANTIC
 
 void main()
@@ -343,16 +333,11 @@ void main()
 		tree.insert(rand() % 100);
 	}
 	tree.print();
-	tree.erase(58);
 	cout << delimiter << delimiter;
-	tree.print();
-	/*cout << delimiter << delimiter;
 	tree.balance();
-	tree.print();
-	cout << delimiter << delimiter;
+	//tree.print();
 	tree.treePrint();
-	cout << endl;
-	cout << delimiter;*/
+	cout << delimiter << delimiter;
 	/*cout << "MIN " << tree.minValue();
 	cout << endl;
 	cout << "MAX " << tree.maxValue();
