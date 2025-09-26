@@ -1,5 +1,5 @@
 ﻿#include<iostream>
-#include<Windows.h>
+#include<time.h>
 
 using namespace std;
 
@@ -81,6 +81,10 @@ public:
 	{
 		return Sum(Root) / count(Root);
 	}
+	int depth() const
+	{
+		return depth(Root);
+	}
 	void print()const
 	{
 		print(Root);
@@ -95,11 +99,7 @@ public:
 		clear(Root);	
 		Root = nullptr;
 	}
-	/*bool find(int Data)
-	{
-		return find(Data, Root);
-	}*/
-
+	
 private:
 	///// operators
 	Tree& operator=(const Tree& other)
@@ -181,7 +181,12 @@ private:
 	{
 		return Root ? Sum(Root->pLeft) + Sum(Root->pRight) + Root->Data : 0;
 	}
-	
+	int depth(Element* Root) const
+	{
+		return Root == nullptr ? 0 :
+			depth(Root->pLeft) > depth(Root->pRight) ?
+			depth(Root->pLeft) + 1 : depth(Root->pRight) + 1;
+	}
 	void copy(Element* Root)
 	{
 		if (Root == nullptr) return;
@@ -232,8 +237,16 @@ public:
 	}	
 };
 
+template <typename T> void measure_performace(const char message[], T(Tree::*function)()const, const Tree& tree)
+{
+	clock_t start = clock();
+	T result = (tree.*function)();
+	clock_t end = clock();
+	cout << message << "вычислено за " << double(end - start) / CLOCKS_PER_SEC << "  секунд\n";
+}
+
 //#define BASE_CHECK
-#define ERASE_CHECK
+//#define ERASE_CHECK
 //#define MOVE_SEMANTIC
 
 void main()
@@ -285,12 +298,13 @@ void main()
 #endif // BASE_CHECK
 
 #ifdef ERASE_CHECK
-	Tree tree = { 50, 25, 75, 16, 32, 58, 85};
+	Tree tree = { 50, 25, 75, 16, 32, 58, 85, 95, 100};
 	tree.print();
+	//cout << delimiter;
+	//tree.erase(50);
+	//tree.print();
 	cout << delimiter;
-	tree.erase(50);
-	tree.print();
-	cout << delimiter;
+	cout << "DEPTH " << tree.depth() << endl;
 #endif // ERASE_CHECK
 
 #ifdef MOVE_SEMANTIC
@@ -323,4 +337,31 @@ void main()
 	example.print(example.getRoot());
 	cout << delimiter;
 #endif // MOVE_SEMANTIC
+
+
+	int n;
+	cout << "Введите количество элементов: "; cin >> n;
+	Tree tree;
+	for (int i = 0; i < n; i++)
+	{
+		tree.insert(rand() % 100);
+	}
+	/*tree.print();
+	cout << endl;
+	cout << delimiter;
+	cout << "MIN " << tree.minValue() << endl;
+	cout << "MAX " << tree.maxValue() << endl;
+	cout << "COUNT " << tree.count() << endl;
+	cout << "SUM " << tree.Sum() << endl;
+	cout << "AVG " << tree.Avg() << endl;
+	cout << delimiter;
+	cout << "Depth  " << tree.depth() << endl;*/
+
+	measure_performace("MIN ", &Tree::minValue, tree);
+	measure_performace("MAX ", &Tree::maxValue, tree);
+	measure_performace("COUNT ", &Tree::count, tree);
+	measure_performace("SUM ", &Tree::Sum, tree);
+	measure_performace("AVG ", &Tree::Avg, tree);
+	measure_performace("Depth ", &Tree::depth, tree);
+
 }
