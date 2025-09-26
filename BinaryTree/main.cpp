@@ -1,10 +1,12 @@
 ﻿#include<iostream>
 #include<time.h>
-
+#include<algorithm>
 using namespace std;
 
 #define tab				"\t"
 #define delimiter		"\n--------------------------------------------------------------\n"
+//#define MAX(a, b) a > b ? a : b
+
 
 class Tree
 {
@@ -183,9 +185,14 @@ private:
 	}
 	int depth(Element* Root) const
 	{
-		return Root == nullptr ? 0 :
+		return Root == nullptr ? 0 : std::max(depth(Root->pLeft) + 1, depth(Root->pRight) + 1);
+		/*if (Root == nullptr) return 0;
+		int l_depth = depth(Root->pLeft) + 1;
+		int r_depth = depth(Root->pRight) + 1;
+		return l_depth < r_depth ? r_depth : l_depth;*/
+		/*return Root == nullptr ? 0 :
 			depth(Root->pLeft) > depth(Root->pRight) ?
-			depth(Root->pLeft) + 1 : depth(Root->pRight) + 1;
+			depth(Root->pLeft) + 1 : depth(Root->pRight) + 1;*/
 	}
 	void copy(Element* Root)
 	{
@@ -248,6 +255,7 @@ template <typename T> void measure_performace(const char message[], T(Tree::*fun
 //#define BASE_CHECK
 //#define ERASE_CHECK
 //#define MOVE_SEMANTIC
+#define PERFORMANCE_CHECK
 
 void main()
 {
@@ -338,7 +346,7 @@ void main()
 	cout << delimiter;
 #endif // MOVE_SEMANTIC
 
-
+#ifdef PERFORMANCE_CHECK
 	int n;
 	cout << "Введите количество элементов: "; cin >> n;
 	Tree tree;
@@ -363,5 +371,7 @@ void main()
 	measure_performace("SUM ", &Tree::Sum, tree);
 	measure_performace("AVG ", &Tree::Avg, tree);
 	measure_performace("Depth ", &Tree::depth, tree);
+#endif // PERFORMANCE_CHECK
+
 
 }
