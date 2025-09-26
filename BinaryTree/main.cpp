@@ -373,4 +373,5 @@ void main()
 	measure_performace("Depth ", &Tree::depth, tree);
 #endif // PERFORMANCE_CHECK
 
+
 }
