@@ -93,7 +93,7 @@ public:
 		cout << "COUNT complete for: " << double(t_end - t_start) / CLOCKS_PER_SEC << " sec. " << endl;
 		return rcount;
 	}
-	int depth()const
+	int depth()
 	{
 		clock_t t_start = clock();
 		int rdepth = depth(Root);
@@ -394,6 +394,7 @@ void main()
 	tree.print();
 	cout << delimiter;
 	tree.erase(50);
+	//tree.erase(58);
 	tree.print();
 	cout << delimiter;
 	cout << "DEPTH " << tree.depth();
