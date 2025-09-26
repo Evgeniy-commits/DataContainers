@@ -87,6 +87,15 @@ public:
 	{
 		return depth(Root);
 	}
+	void depth_print(int depth)const
+	{
+		depth_print(depth, Root);
+		cout << endl;
+	}
+	void tree_print()const
+	{
+		tree_print(depth());
+	}
 	void print()const
 	{
 		print(Root);
@@ -209,6 +218,19 @@ private:
 		delete Root;
 		Root = nullptr;
 	}
+	void depth_print(int depth, Element* Root) const
+	{
+		if (Root == nullptr) return;
+		if (depth == 0) cout << Root->Data << tab;
+		depth_print(depth - 1, Root->pLeft);
+		depth_print(depth - 1, Root->pRight);
+	}
+	void tree_print(int depth) const
+	{
+		if (depth == -1) return;
+		tree_print(depth - 1);
+		depth_print(depth - 1);
+	}
 	void print(Element* Root)const
 	{
 		if (Root == nullptr) return;
@@ -254,8 +276,9 @@ template <typename T> void measure_performace(const char message[], T(Tree::*fun
 
 //#define BASE_CHECK
 //#define ERASE_CHECK
+#define DEPTH_CHECK
 //#define MOVE_SEMANTIC
-#define PERFORMANCE_CHECK
+//#define PERFORMANCE_CHECK
 
 void main()
 {
@@ -314,6 +337,16 @@ void main()
 	cout << delimiter;
 	cout << "DEPTH " << tree.depth() << endl;
 #endif // ERASE_CHECK
+#ifdef DEPTH_CHECK
+	Tree tree = { 50, 25, 75, 16, 32, 58, 85};
+	cout << delimiter;
+	cout << "DEPTH " << tree.depth() << endl;
+	cout << delimiter;
+	//tree.depth_print(2);
+	cout << delimiter;
+	tree.tree_print();
+	cout << delimiter;
+#endif // DEPTH_CHECK
 
 #ifdef MOVE_SEMANTIC
 
